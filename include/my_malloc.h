@@ -1,4 +1,3 @@
-
 #include<stdio.h>
 #include<stdint.h>
 #include<stdbool.h>
@@ -24,7 +23,3 @@ struct stats{
 };
 typedef struct stats my_stats ;
 typedef struct free_area area;
-
-int main(){
-    return 0;
-};
