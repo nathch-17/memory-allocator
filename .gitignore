@@ -1,0 +1,34 @@
+# --- Compilations et Binaires ---
+# On ignore les fichiers objets et les bibliothèques statiques/dynamiques
+*.o
+*.a
+*.so
+*.dylib
+*.dll
+*.exe
+
+# On ignore le binaire final (adaptez le nom selon votre Makefile)
+# Si votre Makefile génère un fichier nommé "mon_programme" :
+mon_programme
+build/
+bin/
+
+# --- IDE (Visual Studio Code) ---
+.vscode/*
+# On peut choisir de garder settings.json s'il est partagé avec l'équipe
+# Mais on ignore les données temporaires
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+.vscode/ipch/
+.vscode/.browse.vc.db
+
+# --- Système d'exploitation ---
+.DS_Store
+Thumbs.db
+*.swp
+*~
+
+# --- Tests et Logs ---
+*.log
+tests/actual_output/
