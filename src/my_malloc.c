@@ -25,3 +25,19 @@ void init(size_t size){
   premier_bloc -> length = total - sizeof(my_stats) - sizeof(area);
 
 }
+
+void *my_malloc(size_t size){
+  if(global_info) == NULL
+    init(size);
+  area *courant = (area *)(char *)(global_info+1);
+  
+  while courant!= NULL{
+  if(!courant ->inUse && courant->length >=size){
+  courant ->inUse = true;
+  return courant+1;
+  }
+  courant = courant->next;
+  }
+
+  return NULL;
+}
