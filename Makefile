@@ -2,7 +2,12 @@ CC = gcc
 CFLAGS = -Wall -Wextra -Werror -I include
 NAME = my_malloc_test
 SRC = src/my_malloc.c \
-			src/utils.c
+			src/utils.c \
+			tests/test_main.c
+
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
 OBJ = $(SRC:.c=.o)
 
 all: $(NAME)
@@ -18,4 +23,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re 

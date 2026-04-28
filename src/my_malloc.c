@@ -10,7 +10,7 @@ static my_stats *global_info = NULL;
 
 void init(size_t size){
   size_t total = sizeof(my_stats)+sizeof(area)+size;
-  void ptr_1 = sbrk(total);
+  void* ptr_1 = sbrk(total);
   
   global_info = (my_stats *)ptr_1;
   global_info -> magical_bytes = 0x42;
@@ -27,14 +27,15 @@ void init(size_t size){
 }
 
 void *my_malloc(size_t size){
-  if(global_info) == NULL
+  if(global_info == NULL)
     init(size);
-  area *courant = (area *)(char *)(global_info+1);
+
+  area *courant = (area*)(global_info+1);
   
-  while courant!= NULL{
+  while (courant!= NULL){
   if(!courant ->inUse && courant->length >=size){
   courant ->inUse = true;
-  return courant+1;
+  return (void*) (courant+1);
   }
   courant = courant->next;
   }
