@@ -1,0 +1,7 @@
+{
+  "add_std": false,
+  "author": "Nathan",
+  "name": "memory-allocator",
+  "target": "memory-allocator",
+  "type": "lib"
+}
