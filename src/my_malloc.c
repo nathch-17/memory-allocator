@@ -14,7 +14,7 @@ void split(area* block, size_t size){
   
   if(ancien_next != NULL ){
     ancien_next -> prev = nouveau_bloc;
-  }
+    }
     
   /*si ancien next pas null, son prev doit pointer vers nouveau_bloc et non plus vers block*/
   block -> next = nouveau_bloc;
@@ -26,15 +26,8 @@ void split(area* block, size_t size){
   nouveau_bloc -> prev = block;
   nouveau_bloc -> length = ancien_length - size - sizeof(area);
   nouveau_bloc -> next = ancien_next;
-
-
-
-
-
   
-  
-
-
+  global_info -> amount_of_pages ++;
 
 }
 
@@ -72,16 +65,17 @@ void *my_malloc(size_t size){
      
       courant ->inUse = true;
       /*vérfifier si on peut splitter */
-      if(courant -> length >= size + sizeof(area*) +1){
+      if(courant -> length >= size + sizeof(area) +1){
         split(courant,size);
       }
       
       return (void*) (courant+1); /*renvoi un pointeur vers le début de la zone utilisable du bloc alloué*/
     }
 
-    area* ptr_prev = courant;
+   
       if(courant->next == NULL){
-    
+        
+        area* ptr_prev = courant; 
         size_t total = (sizeof(area)+size);
    
         void* ptr = sbrk(total);
