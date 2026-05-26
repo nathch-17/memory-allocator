@@ -4,6 +4,8 @@
 #include "my_malloc.h"
 
 static my_stats *global_info = NULL;
+ 
+
 
 void split(area* block, size_t size){
   
@@ -27,14 +29,15 @@ void split(area* block, size_t size){
   nouveau_bloc -> length = ancien_length - size - sizeof(area);
   nouveau_bloc -> next = ancien_next;
   
-  global_info -> amount_of_pages ++;
+  global_info -> amount_of_blocks ++;
 
 }
 
-void init(size_t size){
-  int page_size = getpagesize();
 
+void init(size_t size){
+ 
   /*Réserve une zone de mémoire pour inscrire toute les donées nécessaire pour le bloc global et le petit bloc ainsi que l'epsace demandé par l'utilisateur*/
+  int page_size = getpagesize();
   size_t besoin = sizeof(my_stats)+sizeof(area)+size;
   int nb_pages = (besoin+page_size-1)/page_size;
   size_t total = nb_pages*page_size;
@@ -54,6 +57,9 @@ void init(size_t size){
 }
 
 void *my_malloc(size_t size){
+  
+  int page_size = getpagesize();
+
   if(global_info == NULL)
     init(size);
 
@@ -74,24 +80,27 @@ void *my_malloc(size_t size){
 
    
       if(courant->next == NULL){
-        
+        size_t besoin = (sizeof(area)+size);
+        int nb_pages = (besoin+page_size-1)/page_size;
+        size_t total = nb_pages*page_size;
         area* ptr_prev = courant; 
-        size_t total = (sizeof(area)+size);
-   
         void* ptr = sbrk(total);
+        global_info -> amount_of_pages += nb_pages;
+        global_info -> amount_of_blocks ++;
    
         if(ptr == (void *)-1) return NULL;
     
 
         area* nouveau_bloc = (area*)(ptr);
-        
         nouveau_bloc -> next = NULL;
         nouveau_bloc -> length = total - sizeof(area);
         nouveau_bloc -> prev = ptr_prev;
         ptr_prev -> next = nouveau_bloc;
-        
-
         nouveau_bloc -> inUse = true;
+
+        if(nouveau_bloc -> length >= size + sizeof(area)+1){
+          split(nouveau_bloc,size);
+        }
 
 
         return (void*)(nouveau_bloc+1); /*renvoi pointeur vers la nouvelle zone utilisable */

@@ -1,6 +1,7 @@
 #include<stdio.h>
 #include<stdint.h>
 #include<stdbool.h>
+#include <stdlib.h>
 
 
 
@@ -23,3 +24,5 @@ struct stats{
 };
 typedef struct stats my_stats ;
 typedef struct free_area area;
+
+void* my_malloc(size_t size);
