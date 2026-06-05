@@ -66,7 +66,9 @@ void *my_malloc(size_t size){
   area *courant = (area*)(global_info+1);
   
   while (courant!= NULL){
-    
+
+
+    /*Cas 1*/
     if(!courant ->inUse && courant->length >=size){
      
       courant ->inUse = true;
@@ -74,43 +76,76 @@ void *my_malloc(size_t size){
       if(courant -> length >= size + sizeof(area) +1){
         split(courant,size);
       }
+      /*tests d'affichage*/
+      printf("sizeof(area) = %zu\n", sizeof(area));
+      printf("blocks = %d\n", global_info->amount_of_blocks);
       
       return (void*) (courant+1); /*renvoi un pointeur vers le début de la zone utilisable du bloc alloué*/
     }
 
-   
-      if(courant->next == NULL){
-        size_t besoin = (sizeof(area)+size);
+   /*Cas 2*/
+      if(courant->next == NULL && !courant -> inUse){
+        
+        size_t besoin = size - (courant->length);
         int nb_pages = (besoin+page_size-1)/page_size;
         size_t total = nb_pages*page_size;
-        area* ptr_prev = courant; 
         void* ptr = sbrk(total);
-        global_info -> amount_of_pages += nb_pages;
-        global_info -> amount_of_blocks ++;
-   
-        if(ptr == (void *)-1) return NULL;
+        if(ptr == (void *)-1)return NULL;
+        
+        global_info-> amount_of_pages += nb_pages;
+        courant -> length += total; /*agrandir courant*/
+        courant -> inUse = true;
+
+        if(courant -> length >= size +sizeof(area)+1){    /*gérer la zone de surplus*/
+          split(courant,size);
+        }
+        /*tests d'affichage*/
+        printf("sizeof(area) = %zu\n", sizeof(area));
+        printf("blocks = %d\n", global_info->amount_of_blocks);
+        
+        return (void*)(courant+1); /*renvoi pointeur vers la nouvelle zone utilisable */
+
     
 
-        area* nouveau_bloc = (area*)(ptr);
-        nouveau_bloc -> next = NULL;
+      }
+     
+      /*Cas 3*/
+      if(courant -> inUse && courant-> next == NULL){
+        area* ptr_prev = courant;
+        /*repousser la limite du heap*/
+        size_t besoin = sizeof(area)+ size;
+        int nb_pages = (besoin+page_size-1)/page_size;
+        size_t total = nb_pages*page_size;
+        
+        void* ptr = sbrk(total);
+        if(ptr == (void *)-1)return NULL;
+
+        /*créer un nouveau bloc d'une taille suffisante*/
+
+        area * nouveau_bloc = (area*)(ptr);
+        nouveau_bloc -> inUse = true;
         nouveau_bloc -> length = total - sizeof(area);
         nouveau_bloc -> prev = ptr_prev;
+        nouveau_bloc -> next = NULL;
+        
         ptr_prev -> next = nouveau_bloc;
-        nouveau_bloc -> inUse = true;
-
+        global_info -> amount_of_pages += nb_pages;
+        global_info -> amount_of_blocks ++;
         if(nouveau_bloc -> length >= size + sizeof(area)+1){
           split(nouveau_bloc,size);
         }
+        /*tests d'affichage*/
+        printf("sizeof(area) = %zu\n", sizeof(area));
+        printf("blocks = %d\n", global_info->amount_of_blocks);
+        
+        return (void*)(nouveau_bloc+1);
 
-
-        return (void*)(nouveau_bloc+1); /*renvoi pointeur vers la nouvelle zone utilisable */
-
-    
 
       }
   courant = courant->next; /*si taille insuffisante passe au prochain bloc*/
  
   }
+
 
 return NULL;
 }
