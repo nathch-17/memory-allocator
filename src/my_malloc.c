@@ -77,6 +77,7 @@ void *my_malloc(size_t size){
         split(courant,size);
       }
       /*tests d'affichage*/
+      printf("Cas 1 : \n");
       printf("sizeof(area) = %zu\n", sizeof(area));
       printf("blocks = %d\n", global_info->amount_of_blocks);
       
@@ -100,6 +101,7 @@ void *my_malloc(size_t size){
           split(courant,size);
         }
         /*tests d'affichage*/
+        printf("Cas 2 : \n");
         printf("sizeof(area) = %zu\n", sizeof(area));
         printf("blocks = %d\n", global_info->amount_of_blocks);
         
@@ -135,6 +137,7 @@ void *my_malloc(size_t size){
           split(nouveau_bloc,size);
         }
         /*tests d'affichage*/
+        printf("Cas 3 : \n");
         printf("sizeof(area) = %zu\n", sizeof(area));
         printf("blocks = %d\n", global_info->amount_of_blocks);
         
