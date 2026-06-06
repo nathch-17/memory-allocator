@@ -5,8 +5,36 @@
 
 static my_stats *global_info = NULL;
  
+/*Implémetation de la fonction merge*/
+
+void merge(area* courant,area* next){
+  courant -> next = next-> next;
+  courant -> length += (next -> length) + (uint32_t)(sizeof(area)) ;
+  if(next -> next != NULL) next -> next -> prev = courant;
+  
+}
 
 
+
+/*Implémentation de la fonction my_free*/
+void my_free(void* ptr){
+  if(ptr == NULL)return;
+  area* courant = (area*)ptr -1;
+  courant -> inUse = false;
+   
+  if(courant -> next != NULL && !courant -> next -> inUse ){
+    merge (courant,courant ->next);
+  }
+
+  if(courant -> prev != NULL && !courant -> prev -> inUse ){
+    merge(courant->prev,courant);
+  }
+ 
+ 
+  
+}
+
+/*Implémetation de la fonction split */
 void split(area* block, size_t size){
   
   area *nouveau_bloc = (area*)((uint8_t*)block+sizeof(area)+size);
@@ -152,3 +180,7 @@ void *my_malloc(size_t size){
 
 return NULL;
 }
+
+
+
+
