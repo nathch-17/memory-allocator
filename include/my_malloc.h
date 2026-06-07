@@ -26,3 +26,8 @@ typedef struct stats my_stats ;
 typedef struct free_area area;
 
 void* my_malloc(size_t size);
+void my_free(void* ptr);
+
+my_stats* get_global_info(void);
+void print_heap();
+

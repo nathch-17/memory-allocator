@@ -4,6 +4,10 @@
 #include "my_malloc.h"
 
 static my_stats *global_info = NULL;
+
+my_stats* get_global_info(void){
+  return global_info;
+}
  
 /*Implémetation de la fonction merge*/
 
@@ -24,10 +28,12 @@ void my_free(void* ptr){
    
   if(courant -> next != NULL && !courant -> next -> inUse ){
     merge (courant,courant ->next);
+    printf("fusion courant vers next de %p avec %p\n",courant,courant -> next);
   }
 
   if(courant -> prev != NULL && !courant -> prev -> inUse ){
     merge(courant->prev,courant);
+    printf("fusion courant vers prev de %p avec %p ",courant,courant -> prev);
   }
  
  
@@ -61,7 +67,7 @@ void split(area* block, size_t size){
 
 }
 
-
+/*Implémetation de l'initialisation d'un premier_bloc et du global_stats_infos*/
 void init(size_t size){
  
   /*Réserve une zone de mémoire pour inscrire toute les donées nécessaire pour le bloc global et le petit bloc ainsi que l'epsace demandé par l'utilisateur*/
