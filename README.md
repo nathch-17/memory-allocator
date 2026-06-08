@@ -24,7 +24,7 @@ exploring concepts like :
 Clone the repository and run `make` at the **root of the project** :
 
 ```bash
-[git clone https://github.com/your-username/my-malloc.git](https://github.com/nathch-17/memory-allocator.git)
+git clone https://github.com/nathch-17/memory-allocator.git
 cd memory-allocator
 make
 ````
