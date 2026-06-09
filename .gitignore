@@ -12,7 +12,7 @@
 mon_programme
 build/
 bin/
-
+my_malloc_test
 # --- IDE (Visual Studio Code) ---
 .vscode/*
 # On peut choisir de garder settings.json s'il est partagé avec l'équipe
